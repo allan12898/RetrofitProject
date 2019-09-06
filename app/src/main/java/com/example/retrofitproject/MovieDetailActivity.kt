@@ -1,6 +1,5 @@
 package com.example.retrofitproject
 
-import android.graphics.Movie
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.retrofitproject.Model.TmdbMovie

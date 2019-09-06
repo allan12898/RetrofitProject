@@ -6,12 +6,19 @@ import androidx.lifecycle.ViewModel
 import com.example.retrofitproject.API.Apifactory
 import com.example.retrofitproject.Model.TmdbMovie
 import com.example.retrofitproject.Repository.MovieRepository
+import com.example.retrofitproject.Repository.Result
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-class TmdbViewModel(activity : Activity) : ViewModel(){
+class TmdbViewModel : ViewModel(){
 
-    private val repository : MovieRepository = MovieRepository(Apifactory.tmdbApi,activity )
+    //private val repository : MovieRepository = MovieRepository(Apifactory.tmdbApi,activity )
 
-    fun fetchMovies( keyword: String ,page : Int) {
+    private val repository : MovieRepository = MovieRepository(Apifactory.tmdbApi )
+
+
+
+    suspend fun fetchMovies( keyword: String ,page : Int) {
 
         if(keyword == ""){
 
@@ -23,12 +30,14 @@ class TmdbViewModel(activity : Activity) : ViewModel(){
 
     }
 
-    private lateinit var LiveMovieList : MutableLiveData<ArrayList<TmdbMovie>>
+      var LiveMovieList  =  MutableLiveData<ArrayList<TmdbMovie>>()
 
-    fun fetchLiveMovie(keyword : String, page : Int){
-        var movies = repository.getMovieByKeyword(keyword,page)
+     fun fetchLiveMovie(keyword : String, page : Int){
+         GlobalScope.launch {
+             var movies = repository.getMovieByKeyword(keyword, page)
+                 LiveMovieList.postValue(movies)
 
-        LiveMovieList.postValue(movies)
+         }
 
 
     }

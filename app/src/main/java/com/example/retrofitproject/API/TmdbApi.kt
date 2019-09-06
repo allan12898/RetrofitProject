@@ -21,9 +21,9 @@ interface TmdbApi{
     fun getMovieDetailById( @Query("i") id: String): Call<MovieDetail>
 
     @GET(".")
-     fun getMovieByKeyword(@Query("s") keyword:String,
+    fun getMovieByKeyword(@Query("s") keyword:String,
                           @Query("page") page : Int,
-                           @Query("apikey") key : String) : Call<TmdbMovieResponse>
+                           @Query("apikey") key : String) : Deferred<Response<TmdbMovieResponse>>
 
 
 }

@@ -51,7 +51,10 @@ class MainActivity : AppCompatActivity(), MovieRepository.movieResponse, ItemOnC
     }
     fun initRecycleView(){
         linearLayoutManager = LinearLayoutManager(this)
-        tmdbViewModel = TmdbViewModel(this)
+
+        //tmdbViewModel = TmdbViewModel(this)
+        tmdbViewModel = ViewModelProviders.of(this).get(TmdbViewModel::class.java)
+
         movie_rv.layoutManager = linearLayoutManager
         adapter = MovieAdapter(MovieList,this)
         movie_rv.adapter = adapter
@@ -65,17 +68,26 @@ class MainActivity : AppCompatActivity(), MovieRepository.movieResponse, ItemOnC
     }
 
     fun getMovies(searchString : String){
-            tmdbViewModel.fetchMovies(searchString, 1)
+            //tmdbViewModel.fetchMovies(searchString, 1)
+        tmdbViewModel.fetchLiveMovie(searchString, 1)
+        tmdbViewModel.LiveMovieList.observe(this, Observer {
+            c ->
+
+            MovieList.clear()
+            MovieList.addAll(c)
+            adapter.notifyDataSetChanged()
+            Log.d("result", c.toString())
+        })
 
 
     }
 
     override fun displayMovie(newMovieList: ArrayList<TmdbMovie>) {
 
-        MovieList.clear()
-        MovieList.addAll(newMovieList)
-        adapter.notifyDataSetChanged()
-        Log.d("movie", MovieList.toString())
+//        MovieList.clear()
+//        MovieList.addAll(newMovieList)
+//        adapter.notifyDataSetChanged()
+//        Log.d("movie", MovieList.toString())
     }
 
     companion object {
